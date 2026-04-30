@@ -179,8 +179,7 @@ model Category {
   expenses Expense[]
   incomes  Income[]
 
-  @@unique([name])
-  @@unique([userId])
-  @@unique([type])
+  @@index([name])
   @@index([userId])
+  @@index([type])
 }
