@@ -1,0 +1,186 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/**
+ * Enums
+ */
+enum Recurring {
+  Weekly
+  BiWeekly
+  Monthly
+  Yearly
+}
+
+enum Status {
+  Achieved
+  InProgress
+  Cancelled
+}
+
+enum CategoryType {
+  Income
+  Expense
+}
+
+/**
+ * Models
+ */
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  currency  String   @default("MXN")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  incomes      Income[]
+  expenses     Expense[]
+  wallets      Wallet[]
+  budgets      Budget[]
+  savingsGoals SavingsGoals[]
+  categories   Category[]
+}
+
+model Income {
+  id              String     @id @default(uuid())
+  name            String
+  userId          String
+  amount          Decimal    @db.Decimal(14, 2)
+  categoryId      String
+  walletId        String
+  description     String?
+  date            DateTime   @db.Date
+  isRecurring     Boolean    @default(false)
+  recurringPeriod Recurring?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  wallet   Wallet   @relation(fields: [walletId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+
+  @@index([userId])
+  @@index([categoryId])
+  @@index([walletId])
+  @@index([date])
+}
+
+model Expense {
+  id              String     @id @default(uuid())
+  name            String
+  description     String?
+  userId          String
+  amount          Decimal    @db.Decimal(14, 2)
+  categoryId      String
+  walletId        String
+  date            DateTime   @db.Date
+  isRecurring     Boolean    @default(false)
+  recurringPeriod Recurring?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  wallet   Wallet   @relation(fields: [walletId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+
+  @@index([userId])
+  @@index([categoryId])
+  @@index([date])
+  @@index([walletId])
+}
+
+model Wallet {
+  id        String   @id @default(uuid())
+  name      String
+  currency  String   @default("MXN")
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  incomes  Income[]
+  expenses Expense[]
+
+  @@index([userId])
+}
+
+model SavingsGoals {
+  id           String   @id @default(uuid())
+  name         String
+  description  String?
+  targetAmount Decimal  @db.Decimal(14, 2)
+  deadline     DateTime @db.Date
+  status       Status
+  icon         String
+  userId       String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user                 User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  savingsContributions SavingsContribution[]
+
+  @@index([userId])
+}
+
+model SavingsContribution {
+  id        String   @id @default(uuid())
+  goalId    String
+  amount    Decimal  @db.Decimal(14, 2)
+  note      String?
+  date      DateTime @db.Date
+  createdAt DateTime @default(now())
+
+  goal SavingsGoals @relation(fields: [goalId], references: [id])
+
+  @@index([goalId])
+  @@index([date])
+}
+
+model Budget {
+  id          String    @id @default(uuid())
+  userId      String
+  categoryId  String
+  amountLimit Decimal   @db.Decimal(14, 2)
+  activeFrom  DateTime  @db.Date
+  activeTo    DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  user        User      @relation(fields: [userId], references: [id])
+  category    Category  @relation(fields: [categoryId], references: [id])
+
+  @@unique([userId, categoryId, activeFrom, activeTo])
+  @@index([userId])
+  @@index([categoryId])
+}
+
+model Category {
+  id        String       @id @default(uuid())
+  name      String
+  icon      String
+  type      CategoryType // <-- esto distingue si es de ingreso o gasto
+  isDefault Boolean      @default(false)
+  userId    String?
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  user     User?     @relation(fields: [userId], references: [id], onDelete: Restrict)
+  budgets  Budget[]
+  expenses Expense[]
+  incomes  Income[]
+
+  @@unique([name])
+  @@unique([userId])
+  @@unique([type])
+  @@index([userId])
+}
