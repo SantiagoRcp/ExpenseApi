@@ -4,6 +4,8 @@ import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import {errorHandler} from "./middlewares/errorHandler.js";
+// Import Routes
+import authRoute from "./modules/Auth/auth.route.js";
 
 const app = express();
 
@@ -16,7 +18,8 @@ app.get('/health', (_req: Request, res: Response) => {
     res.status(200).json({status: 'success', message: 'Health ok', uptime: process.uptime()});
     return;
 })
-
+// Routes
+app.use('/api/v1/auth', authRoute);
 
 app.use(errorHandler)
 
