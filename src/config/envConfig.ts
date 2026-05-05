@@ -12,6 +12,7 @@ const envSchema = z.object({
     DB_PASSWORD: z.string().min(2),
     DB_NAME: z.string().min(2),
     DATABASE_URL: z.string().url("The URL of the database is invalid"),
+    ALLOWED_ORIGINS: z.string().url()
 });
 
 const _env = envSchema.safeParse(process.env);
