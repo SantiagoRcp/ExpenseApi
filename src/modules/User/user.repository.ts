@@ -5,11 +5,10 @@ import type {UserDTO} from "../../shared/types/types.js";
 export class UserRepository {
 
     async register(data: UserDTO): Promise<User> {
-        return await prisma.user.create({data})
+        return prisma.user.create({data});
     }
 
     async findUserByEmail(email: string): Promise<User | null> {
-        return prisma.user.findOne({where: {email}})
+        return prisma.user.findUnique({where: {email}})
     }
-
 }

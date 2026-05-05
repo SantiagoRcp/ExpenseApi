@@ -2,8 +2,9 @@ import express from 'express';
 import {type Request, type Response} from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import rateLimit from 'express-rate-limit';
+import { rateLimit } from 'express-rate-limit';
 import {errorHandler} from "./middlewares/errorHandler.js";
+
 // Import Routes
 import authRoute from "./modules/Auth/auth.route.js";
 
@@ -15,7 +16,7 @@ app.use(rateLimit());
 app.use(express.json());
 
 app.get('/health', (_req: Request, res: Response) => {
-    res.status(200).json({status: 'success', message: 'Health ok', uptime: process.uptime()});
+    res.status(200).json({status: 'success', message: 'Health Ok', uptime: process.uptime()});
     return;
 })
 // Routes
