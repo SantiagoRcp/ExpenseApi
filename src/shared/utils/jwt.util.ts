@@ -14,7 +14,6 @@ export function verifyJWT(token: string): any {
         if (error instanceof jwt.TokenExpiredError) {
             throw new UnauthorizedError("Token expirado");
         }
-        console.error(error);
         throw new UnauthorizedError("Invalid Token")
     }
 }

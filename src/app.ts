@@ -9,6 +9,7 @@ import cookieParser from "cookie-parser";
 
 // Import Routes
 import authRoute from "./modules/Auth/auth.route.js";
+import userRouter from "./modules/User/user.route.js";
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.get('/health', (_req: Request, res: Response) => {
 })
 // Routes
 app.use('/api/v1/auth', authRoute);
+app.use('/api/v1/user', userRouter)
 
 app.use(errorHandler)
 
