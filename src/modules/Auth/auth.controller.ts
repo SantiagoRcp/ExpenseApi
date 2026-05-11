@@ -2,6 +2,7 @@ import type {Request, Response} from "express";
 import type {IAuthService} from "./auth.types.js";
 import type {UserDTO} from "../../shared/types/types.js";
 import type {LoginDTO} from "./auth.schema.js";
+import {env} from "../../config/envConfig.js";
 
 export class AuthController {
     constructor(private readonly authService: IAuthService) {
@@ -14,7 +15,7 @@ export class AuthController {
         res.cookie("token", newUser.token, {
             maxAge: 24 * 60 * 60 * 1000,
             httpOnly: true,
-            secure: true,
+            secure: env.NODE_ENV === "production",
             sameSite: "strict"
         });
 
@@ -28,7 +29,7 @@ export class AuthController {
         res.cookie("token", response.token, {
             maxAge: 24 * 60 * 60 * 1000,
             httpOnly: true,
-            secure: true,
+            secure: env.NODE_ENV === "production",
             sameSite: "strict"
         });
         res.status(200).json({status: response.status, message: response.message, user: response.user});
@@ -37,7 +38,7 @@ export class AuthController {
     async logout(_req: Request, res: Response) {
         res.clearCookie("token", {
             httpOnly: true,
-            secure: true,
+            secure: env.NODE_ENV === "production",
             sameSite: "strict"
         });
         res.status(200).json({status: "ok", message: "Logged out successfully"});

@@ -4,6 +4,7 @@ import z from 'zod';
 dotenv.config();
 
 const envSchema = z.object({
+    NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
     PORT: z.string().default("3000").transform(Number),
     HOST: z.string().min(2).default("localhost"),
     JWT_SECRET: z.string().min(36),
