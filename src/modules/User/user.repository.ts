@@ -9,6 +9,10 @@ export class UserRepository {
     }
 
     async findUserByEmail(email: string): Promise<User | null> {
-        return prisma.user.findUnique({where: {email}})
+        return prisma.user.findUnique({where: {email}});
+    }
+
+    async findUserById(id: string): Promise<User | null> {
+        return prisma.user.findUnique({where: {id}});
     }
 }
