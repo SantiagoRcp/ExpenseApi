@@ -11,6 +11,7 @@ import cookieParser from "cookie-parser";
 import authRoute from "./modules/Auth/auth.route.js";
 import userRouter from "./modules/User/user.route.js";
 import categoryRoute from "./modules/Category/category.route.js";
+import walletRoute from "./modules/Wallet/wallet.route.js";
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.get('/api/v1/health', (_req: Request, res: Response) => {
 app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/user', userRouter)
 app.use('/api/v1/category', categoryRoute);
+app.use("/api/v1/wallet", walletRoute);
 
 app.use(errorHandler)
 
