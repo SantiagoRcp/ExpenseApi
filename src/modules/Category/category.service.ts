@@ -11,9 +11,13 @@ export class CategoryService {
         return await this.catRepo.getUserAndSystemCatByType(userId, type);
     }
 
-    async getCategoryById(catId: string): Promise<Category> {
+    async getCategoryById(userId: string, catId: string): Promise<Category> {
         const category = await this.catRepo.getCategoryById(catId);
         if (!category) {
+            throw new NotFoundError("Category not found");
+        }
+
+        if (category.userId !== userId) {
             throw new NotFoundError("Category not found");
         }
         return category;
@@ -23,8 +27,8 @@ export class CategoryService {
         return await this.catRepo.addCategory(category);
     }
 
-    async updateCategory(catId: string, data: UpdateCatDTO): Promise<Category> {
-        const category = await this.getCategoryById(catId);
+    async updateCategory(userId: string, catId: string, data: UpdateCatDTO): Promise<Category> {
+        const category = await this.getCategoryById(userId, catId);
         if (!category) {
             throw new NotFoundError("Category not found");
         }

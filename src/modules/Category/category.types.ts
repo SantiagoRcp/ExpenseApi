@@ -10,7 +10,7 @@ export interface CategoryRepo {
 
 export interface CategoryServ {
     getUserAndSystemCatByType: (userId: string, type: CategoryType) => Promise<Category[]>;
-    getCategoryById: (catId: string) => Promise<Category>;
+    getCategoryById: (userId: string, catId: string) => Promise<Category>;
     addCategory: (category: CategoryDTO) => Promise<Category>;
-    updateCategory: (catId: string, data: UpdateCatDTO) => Promise<Category>;
+    updateCategory: (userId: string, catId: string, data: UpdateCatDTO) => Promise<Category>;
 }
