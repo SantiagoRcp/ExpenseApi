@@ -13,7 +13,20 @@ export function validateZod(zodSchema: ZodSchema, source: Source = "body") {
                 const errors = data.error.issues.map(error => ({message: error.message, path: error.path}));
                 return next(new BadRequestError('Error validating data', {errors}));
             }
-            req[source] = data.data
+
+            // Si validamos "query", no reemplazamos req.query completo.
+            // En su lugar, borramos lo viejo y asignamos lo nuevo validado.
+            if (source === 'query') {
+                for (const key in req.query) {
+                    delete req.query[key];
+                }
+                Object.assign(req.query, data.data);
+            } else {
+                // Para body u otros targets que no suelen tener getters estrictos
+                req[source] = data.data;
+            }
+
+            // req[source] = data.data
             next();
         } catch (error) {
             next(error);
