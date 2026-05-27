@@ -5,11 +5,18 @@ import {AppError} from "../shared/errors/AppError.js";
 export function errorHandler(err: Error, _req: Request, res: Response, _next: NextFunction) {
 //     manejo de errores de zod
     if (err instanceof ZodError) {
-        new AppError("Validation Error", 400, {
+        const appError = new AppError("Validation Error", 400, {
             errors: err.issues.map(issue => ({
                 message: issue.message, path: issue.path
             }))
         });
+        res.status(400).json({
+            statusCode: appError.statusCode,
+            name: appError.name,
+            message: appError.message,
+            errors: appError.errors
+        });
+        return;
     }
 //     manejo de errores propios
     if (err instanceof AppError) {
