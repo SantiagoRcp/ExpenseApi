@@ -36,11 +36,6 @@ export class CategoryService {
         if (category.isDefault) {
             throw new ForbiddenError("You do not have permission to modify the category")
         }
-
-        if (category.userId !== data.userId) {
-            throw new ForbiddenError("You do not have permission to modify the category");
-        }
-
         return await this.catRepo.updateCategory(category.id, data);
     }
 }
