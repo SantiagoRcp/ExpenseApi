@@ -2,7 +2,7 @@ import type {Category, Income, Recurring, Wallet} from "@prisma/client"
 
 export interface IncomeRepo {
     createIncome: (data: IncomeInput) => Promise<Income>;
-    getAllIncome: (userId: string, skip: number, limit: number) => Promise<IncomeAllPagination>;
+    getAllIncome: (userId: string, page: number, limit: number) => Promise<IncomeAllPagination>;
     getIncomeById: (id: string, userId: string) => Promise<Income | null>;
     updateIncome: (data: IncomeUpdate) => Promise<Income>;
     deleteIncome: (incomeId: string, userId: string) => Promise<Income>;
@@ -40,6 +40,10 @@ export type IncomeUpdate = Partial<Omit<IncomeInput, 'userId' | 'date'>> & Pick<
 
 export type IncomeAllPagination = {
     data: Income[],
-    totalItem: number,
-    totalPage: number,
+    meta: {
+        page: number;
+        limit: number;
+        totalItems: number;
+        totalPages: number;
+    };
 }

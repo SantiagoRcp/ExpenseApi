@@ -14,7 +14,7 @@ export class CategoryController {
         }
 
         const incomeCat = await this.catServ.getUserAndSystemCatByType(user.id, "Income");
-        res.status(200).json({income: incomeCat});
+        res.status(200).json({message: "Income categories found", data: incomeCat});
     }
 
     async getCategoriesExpense(req: Request, res: Response) {
@@ -24,7 +24,7 @@ export class CategoryController {
         }
 
         const expenseCat = await this.catServ.getUserAndSystemCatByType(user.id, "Expense");
-        res.status(200).json({expense: expenseCat});
+        res.status(200).json({message: "Expense categories found", data: expenseCat});
     }
 
     async getCategoryById(req: Request, res: Response) {
@@ -35,7 +35,7 @@ export class CategoryController {
             throw new UnauthorizedError("Unauthorized user");
         }
         const category = await this.catServ.getCategoryById(user.id, catId);
-        res.status(200).json({category: category});
+        res.status(200).json({message: "Category found", data: category});
     }
 
     async addCategory(req: Request, res: Response) {
@@ -48,7 +48,7 @@ export class CategoryController {
 
         data.userId = user.id;
         const newCat = await this.catServ.addCategory(data);
-        res.status(200).json({message: "Category correctly registered", category: newCat});
+        res.status(201).json({message: "Category created successfully", data: newCat});
     }
 
     async updateCategory(req: Request, res: Response) {
@@ -60,6 +60,6 @@ export class CategoryController {
         }
         data.userId = user.id
         const updatedCat = await this.catServ.updateCategory(user.id, catId, data);
-        res.status(200).json({message: "Category updated correctly", category: updatedCat})
+        res.status(200).json({message: "Category updated successfully", data: updatedCat})
     }
 }

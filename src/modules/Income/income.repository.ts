@@ -20,23 +20,23 @@ export class IncomeRepository {
         });
     }
 
-    async getAllIncome(userId: string, skip: number, limit: number): Promise<IncomeAllPagination> {
-        const [data, totalItem] = await prisma.$transaction([
+    async getAllIncome(userId: string, page: number, limit: number): Promise<IncomeAllPagination> {
+        const skip = (page - 1) * limit;
+        const [data, totalItems] = await prisma.$transaction([
             prisma.income.findMany({
                 where: {userId},
-                skip, take:
-                limit,
-                include:
-                    {
-                        wallet: {select: {name: true, currency: true}},
-                        category: {select: {name: true, icon: true, type: true}},
-                    }
-            },),
+                skip,
+                take: limit,
+                include: {
+                    wallet: {select: {name: true, currency: true}},
+                    category: {select: {name: true, icon: true, type: true}},
+                }
+            }),
             prisma.income.count({where: {userId}})
         ]);
 
-        const totalPage = Math.ceil(totalItem / limit);
-        return {data, totalItem, totalPage}
+        const totalPages = Math.ceil(totalItems / limit);
+        return {data, meta: {page, limit, totalItems, totalPages}};
     }
 
     async getIncomeById(id: string, userId: string): Promise<Income | null> {

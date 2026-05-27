@@ -20,7 +20,7 @@ export class WalletController {
             userId,
         }
         const wallet = await this.walletServ.createWallet(data);
-        return res.status(201).json({message: 'Wallet created', wallet});
+        return res.status(201).json({message: 'Wallet created successfully', data: wallet});
     }
 
     async getWalletById(req: Request, res: Response): Promise<Response> {
@@ -32,7 +32,7 @@ export class WalletController {
         }
 
         const wallet = await this.walletServ.getWalletById(userId, walletId)
-        return res.status(200).json({message: "Wallet Found", wallet});
+        return res.status(200).json({message: "Wallet found", data: wallet});
     }
 
     async getAllWallets(req: Request, res: Response): Promise<Response> {
@@ -43,7 +43,7 @@ export class WalletController {
         }
 
         const wallets = await this.walletServ.getAllWallets(user.id);
-        return res.status(200).json({message: "Wallets Found", wallets});
+        return res.status(200).json({message: "Wallets found", data: wallets});
     }
 
     async updateWallet(req: Request, res: Response): Promise<Response> {
@@ -62,6 +62,6 @@ export class WalletController {
 
         }
         const updatedWallet = await this.walletServ.updateWallet(user.id, wallet);
-        return res.status(200).json({message: "Wallet Updated successfully", wallet: updatedWallet})
+        return res.status(200).json({message: "Wallet updated successfully", data: updatedWallet})
     }
 }

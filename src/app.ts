@@ -24,7 +24,7 @@ app.use(cookieParser())
 app.use(express.json());
 
 app.get('/api/v1/health', (_req: Request, res: Response) => {
-    res.status(200).json({status: 'success', message: 'Health Ok', uptime: process.uptime()});
+    res.status(200).json({message: 'Health Ok', data: {uptime: process.uptime()}});
     return;
 })
 // Routes

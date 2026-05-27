@@ -20,7 +20,7 @@ export class IncomeController {
             ...data, userId: user.id
         }
         const newIncome = await this.incomeServ.createIncome(incomeData);
-        return res.status(201).json({message: "Income created successfully.", Income: newIncome});
+        return res.status(201).json({message: "Income created successfully", data: newIncome});
     }
 
     async getAllIncome(req: Request, res: Response): Promise<Response> {
@@ -31,8 +31,8 @@ export class IncomeController {
         if (!user) {
             throw new UnauthorizedError("Unauthorized User");
         }
-        const Incomes = await this.incomeServ.getAllIncome(user.id, page, limit);
-        return res.status(200).json({message: "Income", Incomes})
+        const result = await this.incomeServ.getAllIncome(user.id, page, limit);
+        return res.status(200).json({message: "Incomes found", data: result.data, meta: result.meta})
     }
 
     async getIncomeById(req: Request, res: Response): Promise<Response> {
@@ -44,7 +44,7 @@ export class IncomeController {
         }
 
         const income = await this.incomeServ.getIncomeById(id, user.id);
-        return res.status(200).json({message: "Income fine", income})
+        return res.status(200).json({message: "Income found", data: income})
     }
 
     async updateIncome(req: Request, res: Response): Promise<Response> {
@@ -62,7 +62,7 @@ export class IncomeController {
             id
         }
         const income = await this.incomeServ.updateIncome(incomeData);
-        return res.status(200).json({message: "Income updated successfully ", Income: income})
+        return res.status(200).json({message: "Income updated successfully", data: income})
     }
 
     async deleteIncome(req: Request, res: Response): Promise<Response> {
@@ -73,6 +73,6 @@ export class IncomeController {
             throw new UnauthorizedError("Unauthorized User");
         }
         const income = await this.incomeServ.deleteIncome(incomeId, user.id);
-        return res.status(200).json({message: "Income deleted successfully.", deleteIncome: income});
+        return res.status(200).json({message: "Income deleted successfully", data: income});
     }
 }

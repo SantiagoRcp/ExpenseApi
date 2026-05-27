@@ -15,7 +15,7 @@ export class ExpenseController {
             throw new UnauthorizedError("Unauthorized User");
         }
         const expense = await this.expenseServ.createExpense({...data, userId: user.id});
-        return res.status(201).json({message: "", expense});
+        return res.status(201).json({message: "Expense created successfully", data: expense});
     }
 
     async getExpenseById(req: Request, res: Response): Promise<Response> {
@@ -26,7 +26,7 @@ export class ExpenseController {
         }
 
         const expense = await this.expenseServ.getExpenseById(id, user.id);
-        return res.status(200).json({message: "", expense});
+        return res.status(200).json({message: "Expense found", data: expense});
     }
 
     async getAllExpense(req: Request, res: Response): Promise<Response> {
@@ -37,8 +37,8 @@ export class ExpenseController {
         if (!user) {
             throw new UnauthorizedError("Unauthorized User");
         }
-        const expenses = await this.expenseServ.getAllExpenses(user.id, page, limit)
-        return res.status(200).json({message: "Expenses Found", expenses});
+        const result = await this.expenseServ.getAllExpenses(user.id, page, limit)
+        return res.status(200).json({message: "Expenses found", data: result.data, meta: result.meta});
     }
 
     async updateExpense(req: Request, res: Response): Promise<Response> {
@@ -50,7 +50,7 @@ export class ExpenseController {
             throw new UnauthorizedError("Unauthorized User");
         }
         const expenseUpdated = await this.expenseServ.updateExpense({...data, userId: user.id, id});
-        return res.status(200).json({message: "", expenseUpdated});
+        return res.status(200).json({message: "Expense updated successfully", data: expenseUpdated});
     }
 
     async deleteExpense(req: Request, res: Response): Promise<Response> {
@@ -62,6 +62,6 @@ export class ExpenseController {
 
         const expense = await this.expenseServ.deleteExpense(id, user.id);
 
-        return res.status(200).json({message: "Expense deleted", expense});
+        return res.status(200).json({message: "Expense deleted successfully", data: expense});
     }
 }

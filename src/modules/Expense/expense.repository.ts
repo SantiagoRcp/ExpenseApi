@@ -25,17 +25,22 @@ export class ExpenseRepository {
     }
 
     async getAllExpenses(userId: string, page: number, limit: number): Promise<ResultAllExpense> {
-        const [data, totalItem] = await prisma.$transaction([
+        const skip = (page - 1) * limit;
+        const [data, totalItems] = await prisma.$transaction([
             prisma.expense.findMany({
                 where: {userId: userId},
+                skip,
                 take: limit,
-                skip: (page - 1) * limit,
+                include: {
+                    wallet: {select: {name: true, currency: true}},
+                    category: {select: {name: true, icon: true, type: true}},
+                }
             }),
             prisma.expense.count({where: {userId}}),
         ]);
 
-        const totalPage = Math.ceil(totalItem / limit);
-        return {data, pages: totalPage, totalItem};
+        const totalPages = Math.ceil(totalItems / limit);
+        return {data, meta: {page, limit, totalItems, totalPages}};
     }
 
     async updateExpense(data: UpdateExpense): Promise<Expense> {

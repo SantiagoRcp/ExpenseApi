@@ -31,8 +31,7 @@ export class IncomeService {
     }
 
     async getAllIncome(userId: string, page: number, limit: number): Promise<IncomeAllPagination> {
-        const skip = (page - 1) * limit;
-        return await this.incomeRepo.getAllIncome(userId, skip, limit);
+        return await this.incomeRepo.getAllIncome(userId, page, limit);
     }
 
     async getIncomeById(id: string, userId: string): Promise<Income> {

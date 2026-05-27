@@ -8,7 +8,6 @@ export class UserController {
     }
 
     async getMe(req: Request, res: Response) {
-
         const id = req.user?.id;
 
         if (!id) {
@@ -16,8 +15,8 @@ export class UserController {
         }
 
         const user = await this.userServ.getMe(id);
-        res.status(200).send(user);
-        return
+        res.status(200).json({message: "User found", data: user});
+        return;
     }
 
     async userUpdate(req: Request, res: Response) {
@@ -29,8 +28,7 @@ export class UserController {
         }
         const updateUser = await this.userServ.updateUser(id, userData);
 
-        res.status(200).json({message: "user successfully updated", user: updateUser});
+        res.status(200).json({message: "User updated successfully", data: updateUser});
         return;
     }
-
 }

@@ -19,7 +19,7 @@ export class AuthController {
             sameSite: "strict"
         });
 
-        res.status(200).json({status: newUser.status, message: newUser.message, user: newUser.user});
+        res.status(200).json({message: newUser.message, data: newUser.user});
         return;
     }
 
@@ -32,7 +32,7 @@ export class AuthController {
             secure: env.NODE_ENV === "production",
             sameSite: "strict"
         });
-        res.status(200).json({status: response.status, message: response.message, user: response.user});
+        res.status(200).json({message: response.message, data: response.user});
     }
 
     async logout(_req: Request, res: Response) {
@@ -41,6 +41,6 @@ export class AuthController {
             secure: env.NODE_ENV === "production",
             sameSite: "strict"
         });
-        res.status(200).json({status: "ok", message: "Logged out successfully"});
+        res.status(200).json({message: "Logged out successfully"});
     }
 }

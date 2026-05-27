@@ -40,6 +40,10 @@ export type UpdateExpense = Partial<Omit<ExpenseInput, "userId">> & Pick<Expense
 
 export type ResultAllExpense = {
     data: Expense[];
-    pages: number;
-    totalItem: number;
+    meta: {
+        page: number;
+        limit: number;
+        totalItems: number;
+        totalPages: number;
+    };
 }
