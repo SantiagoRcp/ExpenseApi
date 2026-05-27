@@ -13,6 +13,7 @@ import userRouter from "./modules/User/user.route.js";
 import categoryRoute from "./modules/Category/category.route.js";
 import walletRoute from "./modules/Wallet/wallet.route.js";
 import incomeRouter from "./modules/Income/income.route.js";
+import expenseRoute from "./modules/Expense/expense.route.js";
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use('/api/v1/user', userRouter)
 app.use('/api/v1/category', categoryRoute);
 app.use("/api/v1/wallet", walletRoute);
 app.use("/api/v1/income", incomeRouter);
+app.use('/api/v1/expense', expenseRoute);
 
 app.use(errorHandler)
 
