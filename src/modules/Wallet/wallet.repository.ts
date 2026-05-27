@@ -10,10 +10,7 @@ export class WalletRepository {
     async getWalletById(userId: string, id: string): Promise<Wallet | null> {
         return prisma.wallet.findFirst({where: {id, userId}});
     }
-
-    async getWalletByName() {
-    }
-
+    
     async getAllWallets(userId: string) {
         return prisma.wallet.findMany({where: {userId: userId}});
     }
